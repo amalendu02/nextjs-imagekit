@@ -9,15 +9,19 @@ export default withAuth(
     callbacks: {
       authorized({ req, token }) {
         const { pathname } = req.nextUrl;
+        
+        // Allow access to auth-related pages and API routes
         if (
           pathname.startsWith("/api/auth") ||
           pathname === "/login" ||
           pathname === "/register"
-        )
+        ) {
           return true;
+        }
 
+        // Require authentication for home page and other protected routes
         if (pathname === "/" || pathname.startsWith("/api/videos")) {
-          return true;
+          return !!token;
         }
 
         return !!token;

@@ -7,14 +7,19 @@ function RegisterPage() {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
+  const [success, setSuccess] = useState("");
+  const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
   const handleSumit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError(""); // Clear previous errors
+    setSuccess(""); // Clear previous success messages
+    setIsLoading(true);
     
     if (password !== confirmPassword) {
       setError("Passwords do not match");
+      setIsLoading(false);
       return;
     }
 
@@ -35,58 +40,38 @@ function RegisterPage() {
         throw new Error(data.error || "Registration failed");
       }
 
-      console.log(data);
-      router.push("/login");
+      setSuccess("Registration successful! Redirecting to login...");
+      
+      // Redirect to login after 2 seconds
+      setTimeout(() => {
+        router.push("/login");
+      }, 2000);
+      
     } catch (error) {
       console.error(error);
       setError(error instanceof Error ? error.message : "Registration failed");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-//   return (
-//     <div>
-//       <h1>Register</h1>
-//       <form onSubmit={handleSumit}>
-//         <input
-//           type="email"
-//           placeholder="Email"
-//           value={email}
-//           onChange={(e) => setEmail(e.target.value)}
-//         />
-//         <input
-//           type="password"
-//           placeholder="Password"
-//           value={password}
-//           onChange={(e) => setPassword(e.target.value)}
-//         />
-//         <input
-//           type="password"
-//           placeholder="Confirm Password"
-//           value={confirmPassword}
-//           onChange={(e) => setConfirmPassword(e.target.value)}
-//         />
-//         <button type="submit">Register</button>
-//       </form>
-//       <div>
-//         <p>
-//           Already have an account? <a href="/login">Login</a>
-//         </p>
-//       </div>
-//     </div>
-//   );
-
-
-// updating this section with 
-
-return (
+  return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Register</h1>
+        
         {error && (
           <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
             {error}
           </div>
         )}
+        
+        {success && (
+          <div className="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">
+            {success}
+          </div>
+        )}
+        
         <form onSubmit={handleSumit} className="space-y-4">
           <input
             type="email"
@@ -94,6 +79,7 @@ return (
             value={email}
             onChange={(e) => setEmail(e.target.value)}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={isLoading}
           />
           <input
             type="password"
@@ -101,6 +87,7 @@ return (
             value={password}
             onChange={(e) => setPassword(e.target.value)}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={isLoading}
           />
           <input
             type="password"
@@ -108,12 +95,14 @@ return (
             value={confirmPassword}
             onChange={(e) => setConfirmPassword(e.target.value)}
             className="w-full p-3 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500"
+            disabled={isLoading}
           />
           <button 
             type="submit"
-            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-colors"
+            className="w-full bg-blue-500 text-white p-3 rounded-md hover:bg-blue-600 transition-colors disabled:bg-gray-400 disabled:cursor-not-allowed"
+            disabled={isLoading}
           >
-            Register
+            {isLoading ? "Registering..." : "Register"}
           </button>
         </form>
         <div className="mt-6 text-center">
@@ -127,8 +116,6 @@ return (
       </div>
     </div>
   );
-
-
 }
 
 export default RegisterPage;
