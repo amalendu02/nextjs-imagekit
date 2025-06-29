@@ -6,20 +6,19 @@ function RegisterPage() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
-  const [error, setError] = useState(""); // ← ADD THIS LINE
+  const [error, setError] = useState("");
   const router = useRouter();
 
   const handleSumit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    setError(""); // Clear previous errors
+    
     if (password !== confirmPassword) {
-    //   alert("passwords do not match");
-    setError("Passwords do not match");
+      setError("Passwords do not match");
       return;
     }
 
     try {
-      // react-query
-      // loading, error, debounce
       const res = await fetch("/api/auth/register", {
         method: "POST",
         headers: {
@@ -40,6 +39,7 @@ function RegisterPage() {
       router.push("/login");
     } catch (error) {
       console.error(error);
+      setError(error instanceof Error ? error.message : "Registration failed");
     }
   };
 
@@ -82,6 +82,11 @@ return (
     <div className="min-h-screen flex items-center justify-center bg-gray-50">
       <div className="bg-white p-8 rounded-lg shadow-md w-96">
         <h1 className="text-2xl font-bold text-center mb-6 text-gray-800">Register</h1>
+        {error && (
+          <div className="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+            {error}
+          </div>
+        )}
         <form onSubmit={handleSumit} className="space-y-4">
           <input
             type="email"

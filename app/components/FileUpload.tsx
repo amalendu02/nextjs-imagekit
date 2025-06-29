@@ -45,15 +45,31 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
 
     try {
       const authRes = await fetch("/api/auth/imagekit-auth");
+      
+      if (!authRes.ok) {
+        const errorData = await authRes.json();
+        throw new Error(errorData.error || "Authentication failed");
+      }
+      
       const auth = await authRes.json();
+
+      if (!auth.authenticationParameters) {
+        throw new Error("Authentication failed - missing parameters");
+      }
+
+      const { signature, expire, token } = auth.authenticationParameters;
+
+      if (!signature || !expire || !token) {
+        throw new Error("Authentication failed - missing required parameters");
+      }
 
       const res = await upload({
         file,
         fileName: file.name,
         publicKey: process.env.NEXT_PUBLIC_PUBLIC_KEY!,
-        signature: auth.signature,
-        expire: auth.expire,
-        token: auth.token,
+        signature,
+        expire,
+        token,
         onProgress: (event) => {
           if(event.lengthComputable && onProgress){
             const percent = (event.loaded / event.total) * 100;
@@ -65,6 +81,7 @@ const FileUpload = ({ onSuccess, onProgress, fileType }: FileUploadProps) => {
       onSuccess(res)
     } catch (error) {
         console.error("Upload failed", error)
+        setError(error instanceof Error ? error.message : "Upload failed");
     } finally {
         setUploading(false)
     }
