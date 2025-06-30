@@ -13,11 +13,11 @@ export default withAuth(
           pathname.startsWith("/api/auth") ||
           pathname === "/login" ||
           pathname === "/register"
-        )
-          return true;
-
+        ) {
+             return true;
+          }
         if (pathname === "/" || pathname.startsWith("/api/videos")) {
-          return true;
+          return !!token;
         }
 
         return !!token;
