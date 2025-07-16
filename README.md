@@ -1,36 +1,76 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Clip Edit – Web-Based Video Editing Platform
 
-## Getting Started
+## Project Explanation
 
-First, run the development server:
+Clip Edit is a full-stack video editing web application that allows users to apply real-time effects and media transformations directly in the browser.  
+It eliminates the need for traditional, bulky desktop software and provides a lightweight, responsive platform for quick and efficient content editing.
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+---
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+## Problem Statement
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+Most video editing tools are either complex, resource-heavy, or locked behind desktop platforms.  
+Clip Edit solves this by offering a fast, accessible, and browser-based solution where creators can edit and enhance video content without technical barriers or installations.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+---
 
-## Learn More
+## Tech Stack
 
-To learn more about Next.js, take a look at the following resources:
+- Frontend: Next.js, TypeScript, Tailwind CSS  
+- Backend: Next.js API Routes, MongoDB (Atlas)  
+- Authentication: NextAuth.js (Email-based OTP login)  
+- Media Management: ImageKit (for AI-powered URL-based media transformations)  
+- Deployment: Vercel
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+---
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+## Challenging Parts
 
-## Deploy on Vercel
+- Implementing custom OTP login flows using NextAuth.js, along with route protection through middleware.  
+- Efficiently handling dynamic image and video transformations using ImageKit on both frontend and backend.
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+- Designing a smooth registration/login UX while managing cloud media in real-time.  
+- Integrating protected API routes with real-time effects in a scalable way.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+---
+
+## Future Improvements
+
+- Add support for video trimming, cropping, and export features.  
+- Enable user-uploaded video previews and editing history.
+
+- Implement user roles and paid plans for premium features.  
+- Add drag-and-drop timeline editing and real-time collaborative editing tools.
+
+---
+
+## Project Logic & Workflow
+
+1. User lands on the homepage and registers via email.  
+2. OTP is sent using NextAuth and verified to complete login.  
+
+3. Once authenticated, the user is directed to a dashboard where they can upload media or apply transformations.  
+4. ImageKit is used to handle all media operations through dynamic URL parameters, allowing real-time visual effects.  
+
+5. Authenticated routes are protected via middleware, ensuring secure access to media and user data.  
+6. The frontend communicates with backend APIs to manage user state, transformations, and storage.
+
+---
+
+## Additional Functionalities You Can Implement
+
+- AI-powered automatic background removal or filters using ImageKit APIs.  
+- Export edited video clips in different formats and resolutions.
+
+- Integration with FFMPEG or cloud functions for advanced server-side video processing.  
+- Real-time collaborative editing using WebSockets or Firebase.
+
+---
+
+## What I Learned
+
+- Gained deep understanding of full-stack architecture with Next.js and API route design.  
+- Learned how to securely implement OTP-based login using NextAuth.js and protect routes using middleware.
+
+- Worked with ImageKit for dynamic media transformation and understood cloud-based media optimization.  
+- Learned how to deploy scalable, production-ready applications using Vercel and MongoDB Atlas.
